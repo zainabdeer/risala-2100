@@ -175,13 +175,17 @@ main{flex:1;width:100%;max-width:1120px;margin:0 auto;padding:18px 16px 110px}
 
 /* cover */
 .cover{position:relative;border:5px solid var(--ink);box-shadow:8px 8px 0 var(--ink);overflow:hidden;background:var(--ink)}
-.cover .art{aspect-ratio:16/8}
-.cover .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,26,46,.05) 30%,rgba(22,26,46,.88) 100%)}
-.cover .ttl{position:absolute;inset-inline:0;bottom:0;padding:clamp(14px,3vw,30px);color:var(--white);display:grid;gap:6px}
+.cover .art{aspect-ratio:16/8.93}
+.cover .ttl{position:relative;padding:clamp(14px,3vw,28px);color:var(--white);display:grid;gap:6px;border-top:5px solid var(--ink);background:var(--ink)}
 .cover h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(46px,9vw,104px);line-height:1.05;color:var(--cap);
   -webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:5px 5px 0 var(--ink)}
 .cover .sub{font-size:clamp(16px,2.2vw,22px);font-weight:700}
 .cover .meta{font-size:14px;opacity:.85}
+.lesson{margin-top:20px;background:var(--white);border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:16px 20px;display:grid;gap:10px}
+.lesson .ltitle{font-family:var(--display);font-size:clamp(26px,3.6vw,36px);line-height:1.2;color:var(--palm);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.lesson .ltitle span{font-family:var(--body);font-weight:800;font-size:15px;color:var(--white);background:var(--ink);border-radius:999px;padding:2px 12px 0}
+.lesson .goal{margin:0;font-size:clamp(17px,2vw,21px);font-weight:700;line-height:1.7;max-width:60ch}
+.lesson .goal b{color:var(--soil)}
 .starts{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
 .intro{margin-top:18px;max-width:65ch;font-size:17px;line-height:1.8}
 
@@ -368,9 +372,11 @@ function render(){
   stage.innerHTML='';
   const wrap=document.createElement('section'); wrap.className='page';
   if(cur===0){
-    wrap.innerHTML=`<div class="cover"><div class="art"><img src="img/P05.jpg" alt="سلمان يتفاجأ بصورة حفيدته نور تخرج من ساعته الذكية"></div><div class="shade"></div>
+    wrap.innerHTML=`<div class="cover"><div class="art"><img src="img/P00_cover.jpg" alt="سلمان يحمل أربع بذور مضيئة وبجانبه نور، وخلفهما الحيّ جافًّا في جهة وأخضر في الجهة الأخرى"></div>
       <div class="ttl"><h1>رسالة من ٢١٠٠</h1><div class="sub">قصة مصوّرة ناطقة عن دور الفرد والمجتمع في التنمية المستدامة</div>
-      <div class="meta">التربية للمواطنة · الصف الثاني الإعدادي · ص ٨٩ «استنتاجات»</div></div></div>
+      <div class="meta">التربية للمواطنة · الصف الثاني الإعدادي</div></div></div>
+      <div class="lesson"><div class="ltitle"><span>الدرس</span>التنمية المستدامة</div>
+      <p class="goal"><b>الهدف الثالث:</b> أبيّن دور الفرد والمجتمع في تحقيق التنمية المستدامة.</p></div>
       <div class="starts"><button class="btn green" id="startAuto">▶ شغّل القصة كاملة بالصوت</button><button class="btn alt" id="startRead">اقرأ بنفسي</button></div>
       <p class="intro">اضغط على أيّ فقاعة كلام لتسمع الشخصية تتكلّم، أو اضغط «اسمع الصفحة» ليُقرأ كل ما في الصفحة بالترتيب.</p>`;
     stage.appendChild(wrap);
