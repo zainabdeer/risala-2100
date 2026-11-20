@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رسالة من ٢١٠٠</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Lalezar&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Comic-book world: navy ink on cool halftone paper, sunset orange, palm green, hologram cyan */
+  --ink:#161A2E;
+  --paper:#E9EFF6;
+  --sun:#FF8A3D;
+  --palm:#1F8F55;
+  --nour:#3FD8FF;
+  --cap:#FFD84D;
+  --soil:#B9652E;
+  --white:#FFFFFF;
+  --display:"Lalezar","Baloo Bhaijaan 2",system-ui,sans-serif;
+  --body:"Baloo Bhaijaan 2","Segoe UI",Tahoma,system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background-color:var(--paper);
+  background-image:radial-gradient(rgba(22,26,46,.10) 1.2px,transparent 1.3px);
+  background-size:9px 9px;
+  color:var(--ink);font-family:var(--body);font-weight:500;
+  display:flex;flex-direction:column;min-height:100%;
+}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,.bubble:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;
+  padding:10px 16px;background:var(--ink);color:var(--white);border-bottom:4px solid var(--sun)}
+.top .brand{font-family:var(--display);font-size:22px;letter-spacing:.5px;color:var(--cap)}
+.top .pg{font-size:15px;opacity:.85}
+.top .sp{flex:1}
+.toggle{display:flex;align-items:center;gap:8px;background:transparent;color:var(--white);
+  border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 12px 5px 6px;font-size:14px;font-weight:700}
+.toggle .knob{width:34px;height:20px;border-radius:999px;background:rgba(255,255,255,.25);position:relative;transition:background .2s}
+.toggle .knob::after{content:"";position:absolute;top:3px;right:3px;width:14px;height:14px;border-radius:50%;background:var(--white);transition:right .2s}
+.toggle[aria-pressed="true"] .knob{background:var(--palm)}
+.toggle[aria-pressed="true"] .knob::after{right:17px}
+
+main{flex:1;width:100%;max-width:1120px;margin:0 auto;padding:18px 16px 110px}
+
+/* chapter ribbon */
+.ribbon{display:inline-block;font-family:var(--display);font-size:clamp(22px,3.4vw,34px);line-height:1.25;
+  background:var(--cap);border:4px solid var(--ink);box-shadow:5px 5px 0 var(--ink);
+  padding:6px 18px 2px;margin:0 0 16px;transform:rotate(-1deg);text-wrap:balance}
+.ribbon small{display:block;font-family:var(--body);font-weight:700;font-size:.5em;opacity:.8;margin-top:-2px}
+
+/* comic grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel{grid-column:span 1;background:var(--white);border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);
+  border-radius:3px;overflow:hidden;transition:box-shadow .25s,transform .25s}
+.panel.w{grid-column:span 2}
+.panel.live{box-shadow:0 0 0 4px var(--sun),8px 8px 0 var(--ink);transform:translateY(-2px)}
+.art{position:relative;aspect-ratio:16/9;container-type:inline-size;background:#cfd6e0}
+.art img,.art video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.pic{position:relative}
+.layer{position:absolute;left:0;right:0;top:0;aspect-ratio:16/9;container-type:inline-size;pointer-events:none}
+
+/* speech bubbles */
+.bubble{position:absolute;pointer-events:auto;left:calc(var(--x)*1%);top:calc(var(--y)*1%);width:calc(var(--w)*1%);
+  background:var(--white);border:3px solid var(--ink);border-radius:22px;padding:.55em .8em .45em;
+  font-size:clamp(13px,1.85cqi,19px);line-height:1.55;font-weight:700;text-align:right;cursor:pointer;
+  box-shadow:3px 3px 0 rgba(22,26,46,.35);transition:transform .2s,box-shadow .2s}
+.bubble::before,.bubble::after{content:"";position:absolute;left:calc(var(--tl)*1%)}
+.bubble::before{bottom:-21px;width:26px;height:21px;margin-left:-13px;background:var(--ink);clip-path:polygon(0 0,100% 0,45% 100%)}
+.bubble::after{bottom:-14px;width:17px;height:16px;margin-left:-8px;background:inherit;clip-path:polygon(0 0,100% 0,45% 100%)}
+.bubble.nour{background:#E3F9FF;border-color:#0B6F8C;box-shadow:0 0 14px rgba(63,216,255,.75),3px 3px 0 rgba(11,111,140,.35)}
+.bubble.nour::before{background:#0B6F8C}
+.bubble.radio{border-style:dashed;border-radius:12px}
+.bubble.radio::before,.bubble.radio::after{display:none}
+.who{display:inline-flex;align-items:center;gap:6px;font-size:.72em;font-weight:800;color:var(--white);background:var(--ink);
+  border-radius:999px;padding:0 .65em;margin-bottom:.2em;line-height:1.7}
+.bubble.nour .who{background:#0B6F8C}
+.bars{display:none;gap:2px;align-items:flex-end;height:.8em}
+.bars i{width:3px;height:30%;background:currentColor;border-radius:1px}
+.bubble.speaking{transform:scale(1.06);box-shadow:0 0 0 4px var(--sun),5px 5px 0 var(--ink);z-index:3}
+.bubble.speaking .bars{display:inline-flex}
+.bubble.speaking .spk{display:none}
+.bubble.speaking .bars i{animation:eq .5s ease-in-out infinite alternate}
+.bubble.speaking .bars i:nth-child(2){animation-delay:.15s}
+.bubble.speaking .bars i:nth-child(3){animation-delay:.3s}
+@keyframes eq{from{height:25%}to{height:100%}}
+.txt{display:block}
+
+/* captions */
+.cap{position:absolute;pointer-events:auto;top:0;max-width:52%;background:var(--cap);border:3px solid var(--ink);
+  border-top:0;padding:.4em .8em .3em;font-size:clamp(13px,1.85cqi,19px);font-weight:800;line-height:1.5;cursor:default}
+.cap.tr{right:0;border-right:0}
+.cap.tl{left:0;border-left:0}
+.cap.audio{cursor:pointer}
+.cap.seed{background:var(--palm);color:var(--white)}
+.cap.soil{background:var(--sun);color:var(--ink)}
+.cap .ic{display:inline-block;width:1.05em;height:1.05em;vertical-align:-.15em;margin-left:.35em}
+.cap.speaking{box-shadow:0 0 0 4px var(--white),0 0 0 7px var(--ink)}
+
+
+/* narrator strip above each picture */
+.caps{background:var(--cap);border-bottom:3px solid var(--ink);padding:10px 14px 8px;display:grid;gap:8px}
+.narr{display:flex;gap:10px;align-items:flex-start;cursor:pointer;border-radius:8px;padding:2px 4px;transition:background .2s}
+.narr .tag{flex:none;display:inline-flex;align-items:center;gap:5px;background:var(--ink);color:var(--cap);font-weight:800;font-size:13px;border-radius:999px;padding:1px 10px 0;margin-top:4px}
+.narr .ntxt{font-weight:700;font-size:clamp(15px,1.7vw,19px);line-height:1.7;text-wrap:pretty}
+.badge{justify-self:start;display:inline-flex;align-items:center;gap:6px;font-family:var(--display);font-size:clamp(18px,2.2vw,24px);line-height:1.3;
+  padding:5px 14px 1px;border:3px solid var(--ink);border-radius:10px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.badge.seed{background:var(--palm);color:var(--white)}
+.badge.soil{background:var(--sun);color:var(--ink)}
+.badge .spk,.narr .spk{width:.9em;height:.9em}
+.badge .ic{width:1.05em;height:1.05em;flex:none}
+.narr.speaking{background:rgba(255,255,255,.65)}
+.badge.speaking{transform:scale(1.04)}
+.narr .bars,.badge .bars{display:none}
+.narr.speaking .bars,.badge.speaking .bars{display:inline-flex}
+.narr.speaking .spk,.badge.speaking .spk{display:none}
+.narr.speaking .bars i,.badge.speaking .bars i{animation:eq .5s ease-in-out infinite alternate}
+.narr.speaking .bars i:nth-child(2),.badge.speaking .bars i:nth-child(2){animation-delay:.15s}
+
+/* sound effects */
+.sfx{position:absolute;left:calc(var(--x)*1%);top:calc(var(--y)*1%);font-family:var(--display);
+  font-size:clamp(20px,4.2cqi,46px);color:var(--cap);transform:rotate(-8deg);
+  -webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:3px 3px 0 var(--ink);white-space:nowrap}
+
+/* closing text panel */
+.closing{background:var(--ink);color:var(--white);padding:clamp(18px,4vw,40px);display:grid;gap:14px;text-align:center}
+.closing p{margin:0 auto;max-width:42ch;font-size:clamp(17px,2.3vw,24px);line-height:1.75;text-wrap:balance}
+.closing .q{font-family:var(--display);font-size:clamp(34px,6vw,64px);color:var(--cap);line-height:1.2}
+.closing .bubble{position:static;width:auto;margin:0 auto;max-width:640px;background:transparent;border:0;box-shadow:none;color:inherit;padding:0;font-size:inherit}
+.closing .bubble::before,.closing .bubble::after{display:none}
+.closing .bubble.speaking{transform:none;box-shadow:none}
+.closing .bubble.speaking p{color:var(--cap)}
+
+/* recap + seed wall */
+.recap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.card{background:var(--white);border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink);padding:16px 18px}
+.card h3{font-family:var(--display);font-weight:400;font-size:24px;margin:0 0 8px}
+.card.ind h3{color:var(--palm)}
+.card.com h3{color:var(--soil)}
+.card ol{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.card li{display:flex;gap:10px;align-items:center;font-weight:700;font-size:17px}
+.card li b{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:var(--white);font-size:15px}
+.card.ind li b{background:var(--palm)}
+.card.com li b{background:var(--soil)}
+.wall{margin-top:22px}
+.wall form{display:flex;gap:10px;flex-wrap:wrap}
+.wall label{display:block;font-family:var(--display);font-size:26px;margin-bottom:8px}
+.wall input{flex:1 1 260px;font:inherit;font-size:18px;font-weight:700;padding:12px 14px;border:3px solid var(--ink);border-radius:10px;background:var(--white);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;padding:0;list-style:none}
+.chips li{background:#DDF3E6;border:2px solid var(--palm);border-radius:999px;padding:6px 14px 4px;font-weight:700;display:flex;gap:6px;align-items:center}
+.credit{margin-top:26px;font-size:14px;opacity:.75;text-align:center}
+
+/* buttons */
+.btn{border:3px solid var(--ink);background:var(--sun);color:var(--ink);font-weight:800;font-size:17px;
+  padding:10px 20px 7px;border-radius:12px;box-shadow:4px 4px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.alt{background:var(--white)}
+.btn.green{background:var(--palm);color:var(--white)}
+.btn[disabled]{opacity:.4;cursor:default}
+
+/* bottom nav */
+.nav{position:fixed;bottom:0;inset-inline:0;z-index:20;display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:10px 16px;background:rgba(233,239,246,.94);backdrop-filter:blur(6px);border-top:4px solid var(--ink)}
+.dots{display:flex;gap:6px}
+.dots button{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink);background:transparent;padding:0}
+.dots button[aria-current="true"]{background:var(--ink);transform:scale(1.25)}
+.nav .play{min-width:170px}
+
+/* cover */
+.cover{position:relative;border:5px solid var(--ink);box-shadow:8px 8px 0 var(--ink);overflow:hidden;background:var(--ink)}
+.cover .art{aspect-ratio:16/8}
+.cover .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,26,46,.05) 30%,rgba(22,26,46,.88) 100%)}
+.cover .ttl{position:absolute;inset-inline:0;bottom:0;padding:clamp(14px,3vw,30px);color:var(--white);display:grid;gap:6px}
+.cover h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(46px,9vw,104px);line-height:1.05;color:var(--cap);
+  -webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:5px 5px 0 var(--ink)}
+.cover .sub{font-size:clamp(16px,2.2vw,22px);font-weight:700}
+.cover .meta{font-size:14px;opacity:.85}
+.starts{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.intro{margin-top:18px;max-width:65ch;font-size:17px;line-height:1.8}
+
+.page{animation:turn .35s ease-out}
+@keyframes turn{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page{animation:none}.bubble.speaking .bars i{animation:none;height:70%}*{transition:none!important}}
+
+/* phone: bubbles move under the picture */
+@media (max-width:720px){
+  .grid{grid-template-columns:1fr}
+  .panel,.panel.w{grid-column:span 1}
+  .layer{position:static;aspect-ratio:auto;display:flex;flex-direction:column;gap:12px;padding:12px 12px 14px;pointer-events:auto}
+  .layer:empty{display:none}
+  .bubble{position:relative;left:auto;top:auto;width:auto;font-size:16px;margin-top:8px}
+  .bubble::before{bottom:auto;top:-21px;left:calc(var(--tx)*1%);clip-path:polygon(55% 0,0 100%,100% 100%)}
+  .bubble::after{bottom:auto;top:-14px;left:calc(var(--tx)*1%);clip-path:polygon(55% 0,0 100%,100% 100%)}
+  .bubble.radio{margin-top:0}
+  .cap{position:static;max-width:none;border:3px solid var(--ink);font-size:16px;border-radius:4px}
+  .art .cap{position:absolute;font-size:14px;border-top:0;border-radius:0}
+  .sfx{font-size:30px}
+  .recap{grid-template-columns:1fr}
+  .top .pg{display:none}
+  .nav{gap:8px;padding:8px 10px}
+  .nav .dots{display:none}
+  .nav .btn{font-size:15px;padding:9px 12px 6px}
+  .nav .play{min-width:0;flex:1}
+  .caps{padding:10px 10px 8px}
+  .narr{flex-direction:column;gap:4px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand">رسالة من ٢١٠٠</span>
+  <span class="pg" id="pgLabel"></span>
+  <span class="sp"></span>
+  <button class="toggle" id="autoBtn" aria-pressed="false" title="يقرأ كل صفحة بالصوت ثم ينتقل للتالية">
+    <span class="knob" aria-hidden="true"></span><span>قراءة تلقائية</span>
+  </button>
+</header>
+
+<main id="stage" aria-live="polite"></main>
+
+<nav class="nav" aria-label="التنقل بين الصفحات">
+  <button class="btn alt" id="prevBtn">→ السابق</button>
+  <button class="btn play" id="playBtn">▶ اسمع الصفحة</button>
+  <div class="dots" id="dots"></div>
+  <button class="btn alt" id="nextBtn">التالي ←</button>
+</nav>
+
+<script>
+const SEED='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 22c-.6 0-1-.4-1-1v-6.2C7 14.4 4 11.3 4 7V5h2c3.3 0 6 2 6.8 4.9C13.8 7.6 16.2 6 19 6h1v2c0 4-2.8 7.2-7 7.8V21c0 .6-.4 1-1 1z"/></svg>';
+const SOIL='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm8 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6zM2 19c0-3 2.7-5.5 6-5.5 1.6 0 3 .5 4 1.4 1-.9 2.4-1.4 4-1.4 3.3 0 6 2.5 6 5.5v1H2v-1z"/></svg>';
+
+/* Story data: pages → panels → lines. a = ElevenLabs audio file; x,y,w = bubble box (% of panel); tx = where the speaker is (% from left) */
+/* Story data. narr = narrator caption above the picture; badge = seed/soil title; say/radio = speech bubbles.
+   a = ElevenLabs audio file; x,y,w = bubble box (% of picture); tx = where the speaker is (% from left) */
+const PAGES=[
+ {t:'سلمان',s:'طالبٌ مجتهد… وعاداتٌ تُهدر المستقبل',panels:[
+  {img:'P01',w:1,lines:[{k:'narr',a:'N01',t:'هذا سلمان، طالبٌ بحرينيٌّ مجتهد في الصفّ الثاني الإعدادي، يسكن في حيٍّ قديمٍ من أحياء المحرّق.'}]},
+  {img:'P02',w:1,lines:[{k:'narr',a:'N02',t:'لكنّ لسلمان عاداتٍ يوميّةً لا ينتبه لها: يترك الصنبور مفتوحًا وهو منشغلٌ بهاتفه، فيضيع الماء هدرًا.'}]},
+  {img:'P03',w:1,lines:[{k:'narr',a:'N03',t:'ويُشغّل المكيّف والنافذة مفتوحة، فتتسرّب البرودة إلى الخارج، وتُهدَر الكهرباء.'}]},
+  {img:'P04',w:1,lines:[{k:'narr',a:'N04',t:'ويرمي قنينة البلاستيك في الطريق، ظانًّا أنّ ذلك لن يضرّ أحدًا.'}]}
+ ]},
+ {t:'رسالة من ٢١٠٠',s:'ساعة سلمان تضيء فجأة',panels:[
+  {img:'P05',w:1,sfx:{t:'بيب! بيب!',x:80,y:76},lines:[
+    {k:'narr',a:'N05',t:'وفي المساء… أضاءت ساعتُه الذكيّة فجأة!'},
+    {k:'say',who:'nour',n:'نور',a:'A01_nour',x:73,y:3,w:26,tx:70,t:'جدّي سلمان؟ هل تسمعني؟ أنا نور، حفيدتك… أحدّثك من عام ألفين ومئة.'},
+    {k:'say',who:'salman',n:'سلمان',a:'A02_salman',x:2,y:4,w:26,tx:40,t:'حفيدتي؟! ما هذا المزاح؟'}]},
+  {img:'P06',w:1,lines:[
+    {k:'narr',a:'N06',t:'هذا هو الحيّ نفسه في عام ٢١٠٠: حرارةٌ خانقة، وأرضٌ متشقّقة، وماءٌ شحيح.'},
+    {k:'say',who:'nour',n:'نور',a:'A03_nour',x:55,y:4,w:40,tx:45,t:'حيُّنا في زمني شديد الحرارة، والماء فيه شحيح… وهذه آخر نخلة باقية، إنها تموت.'}]},
+  {img:'P07',w:1,lines:[
+    {k:'say',who:'salman',n:'سلمان',a:'A04_salman',x:63,y:5,w:30,tx:52,t:'وما علاقتي أنا بذلك؟'},
+    {k:'radio',who:'nour',n:'نور (من الساعة)',a:'A05_nour',x:57,y:42,w:41,t:'كلُّ قطرةٍ أهدرتَها… وصلت إلينا. لكنّ المستقبل لم يُكتب بعد، وقراراتُك تغيّره. اجمع بذور الاستدامة؛ فكلُّ عادةٍ صحيحةٍ بذرة.'}]}
+ ]},
+ {t:'الفصل الأول: البذور',s:'دور الفرد في التنمية المستدامة',panels:[
+  {img:'P08',w:1,lines:[
+    {k:'badge',v:'seed',a:'A06_seed1',t:'البذرة الأولى: الاستهلاك المسؤول'},
+    {k:'narr',a:'N07',t:'قرّر سلمان أن يبدأ بنفسه: يُغلق الصنبور، ويُطفئ ما لا يحتاجه، ويستهلك على قدر حاجته فقط.'}]},
+  {img:'P09',w:1,lines:[{k:'narr',a:'N08',t:'وفي البقالة، رفض الكيس البلاستيكي، واستعمل كيسًا قماشيًّا يُعاد استخدامه.'}]},
+  {img:'P10',w:1,lines:[
+    {k:'badge',v:'seed',a:'A07_seed2',t:'البذرة الثانية: إدارة النفايات'},
+    {k:'narr',a:'N09',t:'صار يفرز النفايات: الورق في حاوية، والبلاستيك في أخرى، وبقايا الطعام يحوّلها سمادًا للنباتات.'}]}
+ ]},
+ {t:'البذور تكتمل',s:'سلمان ينشر الوعي ويشارك في خدمة وطنه',panels:[
+  {img:'P11',w:1,lines:[
+    {k:'badge',v:'seed',a:'A08_seed3',t:'البذرة الثالثة: التعلّم المستمر ونشر الوعي'},
+    {k:'narr',a:'N10',t:'لم يكتفِ سلمان بما تعلّمه، بل نشره في أسرته.'},
+    {k:'say',who:'salman',n:'سلمان',a:'A09_salman',x:2,y:3,w:31,tx:38,t:'أبي، المكيّف يعمل والنافذة مفتوحة… الطاقة تضيع هدرًا.'},
+    {k:'say',who:'father',n:'الأب',a:'A10_father',x:76,y:3,w:22,tx:73,t:'معك حقٌّ يا بنيّ.'}]},
+  {img:'P12',w:1,lines:[{k:'say',who:'salman',n:'سلمان',a:'A11_salman',x:2,y:3,w:50,tx:76,t:'أغلقي الصنبور وأنتِ تفرشين أسنانك.'}]},
+  {img:'P13',w:1,lines:[
+    {k:'badge',v:'seed',a:'A12_seed4',t:'البذرة الرابعة: المشاركة المواطنية'},
+    {k:'narr',a:'N11',t:'وتطوّع مع شباب الحيّ في حملةٍ لتنظيف الساحل؛ فالمواطن يشارك في خدمة وطنه، ولا يكتفي بالمشاهدة.'}]},
+  {img:'P14',w:1,lines:[
+    {k:'narr',a:'N12',t:'جمع سلمان البذور الأربع… وهي دور الفرد في التنمية المستدامة.'},
+    {k:'say',who:'salman',n:'سلمان',a:'A13_salman',x:3,y:5,w:31,tx:52,t:'نور! جمعتُ البذور الأربع! كيف حال النخلة؟'}]}
+ ]},
+ {t:'المنعطف',s:'البذور وحدها لا تكفي',panels:[
+  {img:'P15',w:1,lines:[
+    {k:'narr',a:'N13',t:'عادت إلى النخلة بعض الخضرة… لكنّها ما زالت ضعيفة، والأرض حولها ما زالت ملوّثة.'},
+    {k:'say',who:'nour',n:'نور',a:'A14_nour',x:56,y:4,w:41,tx:48,t:'البذور وحدها لا تكفي يا جدّي… تحتاج إلى تربة نظيفة. أنت فرد واحد، والتربة هي المجتمع من حولك.'}]},
+  {img:'P16',w:1,lines:[{k:'narr',a:'N14',t:'فهم سلمان الرسالة: جهد الفرد مهمّ، لكنّ التغيير الكبير يحتاج إلى المجتمع كلّه.'}]}
+ ]},
+ {t:'الفصل الثاني: التربة',s:'دور المجتمع ١ · مؤسسات المجتمع المدني',panels:[
+  {img:'P17',w:1,lines:[
+    {k:'badge',v:'soil',a:'N25_civil',t:'مؤسسات المجتمع المدني'},
+    {k:'narr',a:'N15',t:'عرض سلمان فكرته على جمعيّة الحيّ، وهي جمعيّة أهليّة يديرها متطوّعون من السكّان، لخدمة الحيّ دون مقابل.'},
+    {k:'say',who:'head',n:'أبو خالد · رئيس جمعيّة الحيّ',a:'A16_head',x:28,y:1,w:34,tx:60,t:'فكرتك رائعة يا سلمان، والحيّ كلّه معك.'}]},
+  {img:'P18',w:1,lines:[{k:'narr',a:'N16',t:'فنظّمت الجمعيّة حملةً تطوّعيّة: زرعت الأشجار في الطرقات، ووزّعت على البيوت أدواتٍ ترشّد استهلاك الماء.'}]}
+ ]},
+ {t:'الفصل الثاني: التربة',s:'دور المجتمع ٢ · القطاع الخاص',panels:[
+  {img:'P19',w:1,lines:[
+    {k:'badge',v:'soil',a:'A17_private',t:'القطاع الخاص'},
+    {k:'narr',a:'N17',t:'ثمّ زار سلمان ووالده شركةً في الحيّ، واقترحا على مديرها تركيب ألواحٍ للطاقة الشمسيّة.'},
+    {k:'say',who:'manager',n:'حمد · مدير الشركة',a:'A18_manager',x:2,y:3,w:36,tx:26,t:'فكرة ممتازة، سنبدأ تنفيذها الشهر القادم، وسنوفّر لموظفينا بيئة عمل أفضل.'}]},
+  {img:'P20',w:1,lines:[{k:'narr',a:'N18',t:'فركّبت الشركة الألواح على سطحها، لتُنتج كهرباء نظيفة من ضوء الشمس بدل الوقود الملوِّث، ووضعت في الحيّ حاوياتٍ لإعادة التدوير.'}]}
+ ]},
+ {t:'الفصل الثاني: التربة',s:'دور المجتمع ٣ · المؤسسات التعليمية',panels:[
+  {img:'P21',w:1,lines:[
+    {k:'badge',v:'soil',a:'A19_education',t:'المؤسسات التعليمية'},
+    {k:'narr',a:'N19',t:'وفي المدرسة، ربطت المعلّمة فاطمة درس التنمية المستدامة بمشكلات الحيّ الحقيقيّة.'},
+    {k:'say',who:'teacher',n:'المعلّمة فاطمة',a:'A20_teacher',x:2,y:3,w:34,tx:40,t:'من اليوم، ما نتعلّمه في الكتاب نطبّقه في حيّنا.'}]},
+  {img:'P22',w:1,lines:[{k:'narr',a:'N20',t:'فأنشأ الطلّاب حديقةً مدرسيّة تُسقى بالتنقيط لتوفير الماء، وناديًا بيئيًّا ينشر الوعي بين الأهالي.'}]}
+ ]},
+ {t:'الفصل الثاني: التربة',s:'دور المجتمع ٤ · التكافل الاجتماعي',panels:[
+  {img:'P23',w:1,lines:[
+    {k:'badge',v:'soil',a:'A21_solidarity',t:'التكافل الاجتماعي'},
+    {k:'narr',a:'N21',t:'وعلم الجيران أنّ في بيت العمّ أبي يوسف المسنّ تسرّبًا للماء، لا يقدر على إصلاحه وحده.'}]},
+  {img:'P24',w:1,lines:[
+    {k:'narr',a:'N22',t:'فتعاونوا على إصلاحه دون مقابل، وأحضروا له الطعام؛ هكذا يساند أفراد المجتمع بعضهم بعضًا.'},
+    {k:'say',who:'abu',n:'أبو يوسف',a:'A22_abuyousef',x:60,y:3,w:22,tx:86,t:'جزاكم الله خيرًا يا أبنائي.'},
+    {k:'say',who:'salman',n:'سلمان',a:'A23_salman',x:24,y:6,w:27,tx:47,t:'الخيرُ لنا جميعًا يا عمّي.'}]}
+ ]},
+ {t:'عام ٢١٠٠… من جديد',s:'البذور في التربة النظيفة',end:true,panels:[
+  {img:'P25',w:1,lines:[{k:'narr',a:'N23',t:'اجتمعت بذور الأفراد مع تربة المجتمع… فبدأ الحيّ كلّه يتغيّر.'}]},
+  {img:'P26',w:1,lines:[
+    {k:'narr',a:'N24',t:'وفي عام ٢١٠٠…'},
+    {k:'say',who:'nour',n:'نور',a:'A24_nour',x:3,y:4,w:34,tx:47,t:'بدأتَ بقرارك… وأكمله مجتمعُك، فصار مستقبلُنا أفضل.'}]},
+  {closing:true,lines:[{k:'close',a:'A25_closing',t:'التنمية المستدامة ثقافة مجتمعية، تبدأ بقرار فردي، وتنتهي ببيئة ومجتمع يضمنان حياة كريمة للأجيال الحالية والقادمة.'}]}
+ ]}
+];
+
+const SPK='<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" class="spk"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>';
+const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const stage=document.getElementById('stage');
+const total=PAGES.length+1; // + cover
+let cur=0, auto=false, run=0;
+const player=new Audio(); player.preload='auto';
+
+function lineHTML(L,pi,ni,li){
+  const id=`l-${pi}-${ni}-${li}`;
+  const au=L.a?` data-a="${L.a}" tabindex="0" role="button" aria-label="استمع: ${esc(L.n||'الراوي')}"`:'';
+  if(L.k==='narr'){
+    return `<div class="narr" id="${id}"${au}><span class="tag">الراوي${SPK}</span><span class="ntxt">${esc(L.t)}</span></div>`;
+  }
+  if(L.k==='badge'){
+    const ic=L.v==='seed'?SEED:SOIL;
+    return `<div class="badge ${L.v}" id="${id}"${au}>${ic}${esc(L.t)}${SPK}</div>`;
+  }
+  if(L.k==='close'){
+    return `<div class="bubble" id="${id}"${au}><p>${esc(L.t)}</p></div>`;
+  }
+  const tl=Math.max(10,Math.min(88,((L.tx??L.x+L.w/2)-L.x)/L.w*100));
+  const cls=`bubble ${L.who==='nour'?'nour':''} ${L.k==='radio'?'radio':''}`;
+  return `<div class="${cls}" id="${id}" style="--x:${L.x};--y:${L.y};--w:${L.w};--tl:${tl};--tx:${L.tx??30}"${au}>`+
+    `<span class="who">${esc(L.n)}${L.a?'<svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" class="spk"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>':''}</span>`+
+    `<span class="txt">${esc(L.t)}</span></div>`;
+}
+
+function render(){
+  stopAll();
+  stage.innerHTML='';
+  const wrap=document.createElement('section'); wrap.className='page';
+  if(cur===0){
+    wrap.innerHTML=`<div class="cover"><div class="art"><img src="img/P05.jpg" alt="سلمان يتفاجأ بصورة حفيدته نور تخرج من ساعته الذكية"></div><div class="shade"></div>
+      <div class="ttl"><h1>رسالة من ٢١٠٠</h1><div class="sub">قصة مصوّرة ناطقة عن دور الفرد والمجتمع في التنمية المستدامة</div>
+      <div class="meta">التربية للمواطنة · الصف الثاني الإعدادي · ص ٨٩ «استنتاجات»</div></div></div>
+      <div class="starts"><button class="btn green" id="startAuto">▶ شغّل القصة كاملة بالصوت</button><button class="btn alt" id="startRead">اقرأ بنفسي</button></div>
+      <p class="intro">اضغط على أيّ فقاعة كلام لتسمع الشخصية تتكلّم، أو اضغط «اسمع الصفحة» ليُقرأ كل ما في الصفحة بالترتيب.</p>`;
+    stage.appendChild(wrap);
+    wrap.querySelector('#startAuto').onclick=()=>{setAuto(true);go(1)};
+    wrap.querySelector('#startRead').onclick=()=>{setAuto(false);go(1)};
+  } else {
+    const pi=cur-1, P=PAGES[pi];
+    let h=`<h2 class="ribbon">${esc(P.t)}<small>${esc(P.s)}</small></h2><div class="grid">`;
+    P.panels.forEach((pn,ni)=>{
+      if(pn.closing){
+        h+=`<figure class="panel w" style="margin:0" id="p-${ni}"><div class="closing">${pn.lines.map((L,li)=>lineHTML(L,pi,ni,li)).join('')}<div class="q">وأنت… ما بذرتك؟</div></div></figure>`;
+        return;
+      }
+      const capL=pn.lines.filter(L=>L.k==='narr'||L.k==='badge'), rest=pn.lines.filter(L=>L.k==='say'||L.k==='radio');
+      h+=`<figure class="panel ${pn.w?'w':''}" style="margin:0" id="p-${ni}">`+
+        (capL.length?`<div class="caps">${capL.map(L=>lineHTML(L,pi,ni,pn.lines.indexOf(L))).join('')}</div>`:'')+
+        `<div class="pic"><div class="art"><img src="img/${pn.img}.jpg" alt="" loading="${ni<2?'eager':'lazy'}">`+
+        (pn.sfx?`<span class="sfx" style="--x:${pn.sfx.x};--y:${pn.sfx.y}" aria-hidden="true">${esc(pn.sfx.t)}</span>`:'')+
+        `</div><div class="layer">${rest.map(L=>lineHTML(L,pi,ni,pn.lines.indexOf(L))).join('')}</div></div></figure>`;
+    });
+    h+='</div>';
+    if(P.end){
+      h+=`<div class="recap">
+        <div class="card ind"><h3>البذور: دور الفرد</h3><ol><li><b>١</b>الاستهلاك المسؤول</li><li><b>٢</b>إدارة النفايات</li><li><b>٣</b>التعلّم المستمر ونشر الوعي</li><li><b>٤</b>المشاركة المواطنية</li></ol></div>
+        <div class="card com"><h3>التربة: دور المجتمع</h3><ol><li><b>١</b>مؤسسات المجتمع المدني</li><li><b>٢</b>القطاع الخاص</li><li><b>٣</b>المؤسسات التعليمية</li><li><b>٤</b>التكافل الاجتماعي</li></ol></div></div>
+        <div class="card wall"><form id="seedForm"><label for="seedInput" style="flex-basis:100%">ازرع بذرتك</label>
+        <input id="seedInput" maxlength="90" placeholder="مثال: أطفئ الإنارة عند خروجي من الغرفة" autocomplete="off">
+        <button class="btn green" type="submit">ازرع بذرتي</button></form><ul class="chips" id="chips"></ul></div>
+        <div class="starts" style="justify-content:center"><button class="btn alt" id="again">↺ اقرأ القصة من جديد</button></div>
+        <p class="credit">الأصوات: ElevenLabs</p>`;
+    }
+    wrap.innerHTML=h; stage.appendChild(wrap);
+    // phone layout: move overlay captions under the picture too
+    wrap.querySelectorAll('[data-a]').forEach(el=>{
+      const go1=()=>playOne(el); el.addEventListener('click',go1);
+      el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go1()}});
+    });
+    if(P.end) setupWall();
+    const ag=wrap.querySelector('#again'); if(ag) ag.onclick=()=>go(1);
+  }
+  window.scrollTo({top:0,behavior:'instant'});
+  document.getElementById('pgLabel').textContent=cur?`صفحة ${AR(cur)} من ${AR(total-1)}`:'الغلاف';
+  document.getElementById('prevBtn').disabled=cur===0;
+  document.getElementById('nextBtn').disabled=cur===total-1;
+  document.getElementById('playBtn').disabled=cur===0;
+  [...document.getElementById('dots').children].forEach((d,i)=>d.setAttribute('aria-current',i===cur));
+  try{location.hash=cur?('p'+cur):''}catch(e){}
+  if(auto&&cur>0) setTimeout(()=>playPage(),500);
+}
+
+function clearLive(){document.querySelectorAll('.speaking').forEach(e=>e.classList.remove('speaking'));document.querySelectorAll('.panel.live').forEach(e=>e.classList.remove('live'))}
+function stopAll(){run++;player.pause();player.onended=null;clearLive();setPlayLabel(false)}
+function setPlayLabel(on){const b=document.getElementById('playBtn');b.textContent=on?'■ إيقاف':'▶ اسمع الصفحة'}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+function sayEl(el,token){
+  return new Promise(res=>{
+    clearLive(); el.classList.add('speaking'); el.closest('.panel')?.classList.add('live');
+    const r=el.getBoundingClientRect(); if(r.top<70||r.bottom>innerHeight-90) el.closest('.panel').scrollIntoView({behavior:'smooth',block:'center'});
+    if(!el.dataset.a){wait(2300).then(res);return}
+    player.src='audio/'+el.dataset.a+'.mp3';
+    const done=()=>{player.onended=null;res()};
+    player.onended=done; player.onerror=done;
+    player.play().catch(()=>{wait(1500).then(done)});
+  });
+}
+async function playOne(el){stopAll();const t=run;setPlayLabel(true);await sayEl(el,t);if(t===run){clearLive();setPlayLabel(false)}}
+async function playPage(){
+  stopAll(); const t=run; setPlayLabel(true);
+  const P=PAGES[cur-1]; if(!P) return;
+  for(let ni=0;ni<P.panels.length;ni++){
+    for(let li=0;li<P.panels[ni].lines.length;li++){
+      if(t!==run) return;
+      const el=document.getElementById(`l-${cur-1}-${ni}-${li}`); if(!el) continue;
+      await sayEl(el,t); if(t!==run) return; await wait(350);
+    }
+  }
+  if(t!==run) return;
+  clearLive(); setPlayLabel(false);
+  if(auto&&cur<total-1){await wait(900); if(t===run) go(cur+1)}
+}
+function go(n){cur=Math.max(0,Math.min(total-1,n));render()}
+function setAuto(on){auto=on;document.getElementById('autoBtn').setAttribute('aria-pressed',on)}
+
+function setupWall(){
+  const ul=document.getElementById('chips'), f=document.getElementById('seedForm'), inp=document.getElementById('seedInput');
+  let seeds=[]; try{seeds=JSON.parse(localStorage.getItem('seeds2100')||'[]')}catch(e){}
+  const draw=()=>{ul.innerHTML=seeds.map(s=>`<li>${SEED}${esc(s)}</li>`).join('')};
+  draw();
+  f.addEventListener('submit',e=>{e.preventDefault();const v=inp.value.trim();if(!v)return;seeds.unshift(v);seeds=seeds.slice(0,40);
+    try{localStorage.setItem('seeds2100',JSON.stringify(seeds))}catch(e){} inp.value='';draw()});
+}
+
+// controls
+const dots=document.getElementById('dots');
+for(let i=0;i<total;i++){const b=document.createElement('button');b.setAttribute('aria-label',i?`صفحة ${AR(i)}`:'الغلاف');b.onclick=()=>go(i);dots.appendChild(b)}
+document.getElementById('prevBtn').onclick=()=>go(cur-1);
+document.getElementById('nextBtn').onclick=()=>go(cur+1);
+document.getElementById('playBtn').onclick=()=>{ if(document.getElementById('playBtn').textContent.startsWith('■')){stopAll();setAuto(false)} else playPage() };
+document.getElementById('autoBtn').onclick=()=>{setAuto(!auto); if(auto&&cur>0) playPage(); else if(!auto) stopAll()};
+document.addEventListener('keydown',e=>{ if(e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowLeft')go(cur+1); if(e.key==='ArrowRight')go(cur-1); });
+const h=parseInt((location.hash||'').replace('#p',''),10); if(h>0&&h<total) cur=h;
+render();
+</script>
+</body>
+</html>
