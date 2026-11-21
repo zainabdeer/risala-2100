@@ -189,14 +189,56 @@ main{flex:1;width:100%;max-width:1120px;margin:0 auto;padding:18px 16px 110px}
 .starts{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
 .intro{margin-top:18px;max-width:65ch;font-size:17px;line-height:1.8}
 
+/* self-test */
+.quizbtn{display:inline-flex;align-items:center;gap:7px;border:2px solid var(--cap);background:var(--cap);color:var(--ink);
+  font-weight:800;font-size:14px;border-radius:999px;padding:5px 13px 3px;white-space:nowrap}
+.quizbtn svg{width:17px;height:17px;flex:none}
+.qz{position:fixed;inset:0;z-index:50;background:rgba(22,26,46,.72);overflow-y:auto;padding:24px 14px}
+.qz[hidden]{display:none}
+.qz-box{max-width:780px;margin:0 auto;background:var(--paper);border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);border-radius:6px}
+.qz-head{display:flex;align-items:flex-start;gap:12px;padding:16px 18px;background:var(--ink);color:var(--white)}
+.qz-head h2{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(26px,4vw,34px);color:var(--cap);line-height:1.2}
+.qz-head p{margin:2px 0 0;font-size:15px;opacity:.85}
+.qz-head .x{margin-inline-start:auto;flex:none;width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.5);background:transparent;color:var(--white);font-size:22px;line-height:1}
+.qz-body{padding:18px;display:grid;gap:16px}
+.qcard{background:var(--white);border:3px solid var(--ink);border-radius:10px;padding:16px 18px;display:grid;gap:12px}
+.qcard.ok{border-color:var(--palm);box-shadow:0 0 0 3px rgba(31,143,85,.25)}
+.qnum{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px}
+.qnum b{background:var(--ink);color:var(--cap);border-radius:999px;padding:1px 11px 0}
+.qnum span{color:#5b6075}
+.qtext{margin:0;font-size:clamp(17px,2vw,20px);font-weight:700;line-height:1.75}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:2px solid #c9d2df;border-radius:10px;padding:9px 12px;cursor:pointer;font-weight:700;font-size:16px;line-height:1.6;background:var(--white)}
+.opt input{margin-top:6px;accent-color:var(--ink);flex:none;width:18px;height:18px}
+.opt:has(input:checked){border-color:var(--ink);background:#eef3f8}
+.opt.right{border-color:var(--palm);background:#ddf3e6}
+.opt.wrong{border-color:#c2412d;background:#fbe3df}
+.blank{display:inline-block;min-width:150px;font:inherit;font-weight:800;color:var(--ink);border:0;border-bottom:3px dashed var(--ink);background:#fff8dc;padding:2px 8px;margin:0 4px;text-align:center;border-radius:4px 4px 0 0}
+.qcard textarea{font:inherit;font-size:16px;font-weight:600;line-height:1.7;min-height:110px;resize:vertical;border:2px solid #c9d2df;border-radius:10px;padding:10px 12px;background:var(--white);color:var(--ink)}
+.qrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.fb{margin:0;font-weight:700;font-size:16px;line-height:1.7;border-radius:10px;padding:10px 14px}
+.fb:empty{display:none}
+.fb.good{background:#ddf3e6;color:#11593a}
+.fb.bad{background:#fbe3df;color:#8a2a1c}
+.fb.mid{background:#fff3cd;color:#6b4e00}
+.fb .mark{font-family:var(--display);font-size:22px;margin-inline-end:6px}
+.model{font-size:15px;line-height:1.8;background:#eef3f8;border-inline-start:4px solid var(--ink);padding:10px 14px;border-radius:6px}
+.model[hidden]{display:none}
+.qz-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0 18px 18px}
+.score{font-family:var(--display);font-size:24px}
+.score b{color:var(--palm)}
+
 .page{animation:turn .35s ease-out}
 @keyframes turn{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+@media (max-width:480px){.top .brand{display:none}.top{gap:6px}}
 @media (prefers-reduced-motion:reduce){.page{animation:none}.bubble.speaking .bars i{animation:none;height:70%}*{transition:none!important}}
 
 /* phone: bubbles move under the picture */
 @media (max-width:720px){
   .top{gap:8px;padding:8px 10px}
   .top .brand{font-size:18px}
+  .quizbtn{font-size:12px;padding:4px 9px 2px;gap:4px}
+  .quizbtn svg{width:14px;height:14px}
   .toggle{font-size:12px;padding:4px 8px 4px 4px;gap:5px}
   .toggle .knob{width:28px;height:17px}
   .toggle .knob::after{width:11px;height:11px}
@@ -226,6 +268,7 @@ main{flex:1;width:100%;max-width:1120px;margin:0 auto;padding:18px 16px 110px}
 <body>
 <header class="top">
   <span class="brand">رسالة من ٢١٠٠</span>
+  <button class="quizbtn" id="quizBtn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M9 2h6a2 2 0 0 1 2 2h1.5A1.5 1.5 0 0 1 20 5.5v15a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 20.5v-15A1.5 1.5 0 0 1 5.5 4H7a2 2 0 0 1 2-2zm0 2v1h6V4H9zm-1.3 9.3-1.4 1.4L9 17.4l4.7-4.7-1.4-1.4L9 14.6l-1.3-1.3zM14 15v2h4v-2h-4zm0-5v2h4v-2h-4zM6.3 8.3 7.7 9.7 9 8.4l1.3 1.3 1.4-1.4L10.4 7l1.3-1.3-1.4-1.4L9 5.6"/></svg>اختبر نفسك</button>
   <span class="pg" id="pgLabel"></span>
   <span class="sp"></span>
   <button class="toggle" id="fxBtn" aria-pressed="true" title="مؤثرات صوتية عند قلب الصفحات والفقاعات">
@@ -244,6 +287,49 @@ main{flex:1;width:100%;max-width:1120px;margin:0 auto;padding:18px 16px 110px}
   <div class="dots" id="dots"></div>
   <button class="btn alt" id="nextBtn">التالي ←</button>
 </nav>
+
+<div class="qz" id="qz" hidden role="dialog" aria-modal="true" aria-labelledby="qzT">
+ <div class="qz-box">
+  <div class="qz-head"><div><h2 id="qzT">اختبر نفسك</h2><p>ثلاثة أسئلة عن دور الفرد والمجتمع في تحقيق التنمية المستدامة</p></div>
+   <button class="x" id="qzClose" aria-label="إغلاق الاختبار">×</button></div>
+  <div class="qz-body">
+
+   <section class="qcard" id="q1">
+    <div class="qnum"><b>١</b><span>اختيار من متعدد</span></div>
+    <p class="qtext">أيّ المواقف الآتية يمثّل <u>دور المجتمع</u> (وليس دور الفرد) في تحقيق التنمية المستدامة؟</p>
+    <div class="opts" role="radiogroup">
+     <label class="opt"><input type="radio" name="q1" value="a" id="q1a">يُطفئ طالبٌ الأجهزة الكهربائية عند خروجه من غرفته.</label>
+     <label class="opt"><input type="radio" name="q1" value="b" id="q1b">تتبرّع شركةٌ بحاويات لإعادة التدوير، وتموّل حملة توعية بيئية في المنطقة.</label>
+     <label class="opt"><input type="radio" name="q1" value="c" id="q1c">تستخدم أسرةٌ أكياسًا قماشية عند التسوّق بدل الأكياس البلاستيكية.</label>
+     <label class="opt"><input type="radio" name="q1" value="d" id="q1d">ينشر طالبٌ معلومات عن ترشيد المياه بين أصدقائه.</label>
+    </div>
+    <div class="qrow"><button class="btn green" id="q1go">تأكّد</button></div>
+    <p class="fb" id="q1fb" aria-live="polite"></p>
+   </section>
+
+   <section class="qcard" id="q2">
+    <div class="qnum"><b>٢</b><span>أكمل الفراغ</span></div>
+    <p class="qtext">تعاونُ أفراد المجتمع ومساندةُ بعضهم بعضًا، مثل مساعدة كبار السنّ والمحتاجين دون مقابل، يُسمّى
+     <input class="blank" id="q2in" autocomplete="off" aria-label="الكلمة الناقصة" placeholder="......"> الاجتماعي.</p>
+    <div class="qrow"><button class="btn green" id="q2go">تأكّد</button></div>
+    <p class="fb" id="q2fb" aria-live="polite"></p>
+   </section>
+
+   <section class="qcard" id="q3">
+    <div class="qnum"><b>٣</b><span>اقترح حلًّا</span></div>
+    <p class="qtext">لاحظتَ أنّ الماء يُهدَر في دورات مياه مدرستك؛ فالصنابير تُترك مفتوحة وبعضها يسرّب الماء. اقترح حلًّا يجمع بين <u>دور الفرد</u> و<u>دور المجتمع</u>.</p>
+    <label for="q3in" class="qnum"><span>اكتب اقتراحك:</span></label>
+    <textarea id="q3in" placeholder="مثال: أنا سأ... ، وإدارة المدرسة يمكنها أن..."></textarea>
+    <div class="qrow"><button class="btn green" id="q3go">تأكّد</button></div>
+    <p class="fb" id="q3fb" aria-live="polite"></p>
+    <div class="model" id="q3model" hidden><b>إجابة نموذجية:</b> أغلق الصنبور جيدًا بعد الاستخدام، وأنبّه زملائي إلى ترشيد الماء وأبلّغ عن أيّ صنبور يسرّب (دور الفرد). وتقوم إدارة المدرسة بإصلاح الصنابير وتركيب صنابير ذكية موفّرة للماء، وينظّم النادي البيئي حملة توعية في المدرسة (دور المجتمع).</div>
+   </section>
+
+  </div>
+  <div class="qz-foot"><span class="score" id="qzScore">نتيجتك: <b>٠</b> من ٣</span><span class="sp" style="flex:1"></span>
+   <button class="btn alt" id="qzReset">↺ أعد الاختبار</button></div>
+ </div>
+</div>
 
 <script>
 const SEED='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 22c-.6 0-1-.4-1-1v-6.2C7 14.4 4 11.3 4 7V5h2c3.3 0 6 2 6.8 4.9C13.8 7.6 16.2 6 19 6h1v2c0 4-2.8 7.2-7 7.8V21c0 .6-.4 1-1 1z"/></svg>';
@@ -494,6 +580,58 @@ function setupWall(){
     try{localStorage.setItem('seeds2100',JSON.stringify(seeds))}catch(e){} inp.value='';draw();fxChime()});
 }
 
+
+/* ===== self-test ===== */
+function fxBuzz(){ const c=ac(); if(!c) return; const t=c.currentTime, o=c.createOscillator(), g=c.createGain();
+  o.type='sawtooth'; o.frequency.setValueAtTime(190,t); o.frequency.linearRampToValueAtTime(130,t+.25); env(g,t,.01,.07,.26);
+  o.connect(g).connect(c.destination); o.start(t); o.stop(t+.3) }
+const norm=x=>(x||'').replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/\s+/g,' ').trim();
+const solved={q1:false,q2:false,q3:false};
+function setFb(id,cls,html){const f=document.getElementById(id); f.className='fb '+cls; f.innerHTML=html}
+function updScore(){const n=Object.values(solved).filter(Boolean).length; document.getElementById('qzScore').innerHTML=`نتيجتك: <b>${AR(n)}</b> من ٣${n===3?' · أحسنت! 🌱':''}`}
+function mark(q,ok){solved[q]=ok; document.getElementById(q).classList.toggle('ok',ok); updScore(); ok?fxChime():fxBuzz()}
+let q2tries=0;
+document.getElementById('q1go').onclick=()=>{
+  const sel=document.querySelector('input[name=q1]:checked');
+  document.querySelectorAll('#q1 .opt').forEach(o=>o.classList.remove('right','wrong'));
+  if(!sel){setFb('q1fb','mid','اختر إجابة أولًا.');return}
+  if(sel.value==='b'){sel.closest('.opt').classList.add('right');
+    setFb('q1fb','good','<span class="mark">صح ✓</span>الشركة من <b>القطاع الخاص</b>، وهو من مؤسسات المجتمع. أما المواقف الأخرى فهي سلوكيات يقوم بها الفرد بنفسه.'); mark('q1',true)}
+  else{sel.closest('.opt').classList.add('wrong');
+    setFb('q1fb','bad','<span class="mark">خطأ ✗</span>هذا الموقف يمثّل <b>دور الفرد</b>. ابحث عن موقف تقوم به جهة أو مؤسسة في المجتمع، ثم حاول مرة أخرى.'); mark('q1',false)}
+};
+document.getElementById('q2go').onclick=()=>{
+  let v=norm(document.getElementById('q2in').value).replace(/الاجتماعي$/,'').trim().replace(/^ال/,'');
+  if(!v){setFb('q2fb','mid','اكتب الكلمة الناقصة أولًا.');return}
+  if(v==='تكافل'){setFb('q2fb','good','<span class="mark">صح ✓</span><b>التكافل الاجتماعي</b> أحد أدوار المجتمع في التنمية المستدامة؛ فهو يضمن حياة كريمة لجميع أفراده.'); mark('q2',true)}
+  else{q2tries++; setFb('q2fb','bad','<span class="mark">خطأ ✗</span>'+(q2tries>1?'تلميح: الكلمة تبدأ بحرف <b>التاء</b> ومعناها أن يتكفّل الناس ببعضهم: ت _ _ _ ل.':'حاول مرة أخرى. فكّر في الكلمة التي تعني تعاون الناس ومساندة بعضهم بعضًا.')); mark('q2',false)}
+};
+const IND=['اغلق','اغلاق','يغلق','نغلق','ترشيد','ارشد','نرشد','اقلل','تقليل','نقلل','انبه','ننبه','تنبيه','انصح','ننصح','نصح','توعي','وعي','ملصق','لافته','لوحه','ابلغ','نبلغ','ابلاغ','بلغ','اتطوع','نتطوع','تطوع','زملائي','اصدقائي','الطلاب','طالب','الفرد','افراد','انا ','نحن','بنفسي','استخدم','احرص','نحرص','اوفر','نوفر'];
+const COM=['مدرسه','اداره','المعلم','معلم','صيانه','اصلاح','تصليح','يصلح','تصلح','حساس','ذكي','جمعيه','شركه','بلديه','وزاره','نادي','حمله','المجتمع','مجتمع','اولياء','مؤسس','القطاع','تبرع','ميزاني','عامل','فني','سباك'];
+document.getElementById('q3go').onclick=()=>{
+  const raw=document.getElementById('q3in').value, v=' '+norm(raw)+' ';
+  if(norm(raw).length<15){setFb('q3fb','mid','اكتب اقتراحك بجملة أو جملتين على الأقل.');return}
+  const i=IND.some(k=>v.includes(k)), c=COM.some(k=>v.includes(k));
+  if(i&&c){setFb('q3fb','good','<span class="mark">صح ✓</span>اقتراحك جمع بين <b>دور الفرد</b> و<b>دور المجتمع</b>. هكذا تتحقّق التنمية المستدامة: قرار فردي يكمّله المجتمع.'); document.getElementById('q3model').hidden=false; mark('q3',true)}
+  else if(i){setFb('q3fb','mid','<span class="mark">اقتربت!</span>اقتراحك فيه دور الفرد. أضف دور المجتمع: ماذا يمكن أن تفعل إدارة المدرسة أو جهة في المجتمع؟'); mark('q3',false)}
+  else if(c){setFb('q3fb','mid','<span class="mark">اقتربت!</span>اقتراحك فيه دور المجتمع. أضف دورك أنت كفرد: ماذا ستفعل بنفسك؟'); mark('q3',false)}
+  else{setFb('q3fb','bad','<span class="mark">حاول مرة أخرى</span>وضّح في اقتراحك ماذا تفعل أنت (الفرد)، وماذا تفعل المدرسة أو جهة في المجتمع.'); mark('q3',false)}
+};
+const qz=document.getElementById('qz');
+function openQuiz(){stopAll(); setAuto(false); qz.hidden=false; document.body.style.overflow='hidden'; document.getElementById('qzClose').focus(); fxFlip()}
+function closeQuiz(){qz.hidden=true; document.body.style.overflow=''; document.getElementById('quizBtn').focus()}
+document.getElementById('quizBtn').onclick=openQuiz;
+document.getElementById('qzClose').onclick=closeQuiz;
+qz.addEventListener('click',e=>{if(e.target===qz) closeQuiz()});
+document.getElementById('qzReset').onclick=()=>{
+  document.querySelectorAll('input[name=q1]').forEach(r=>r.checked=false);
+  document.querySelectorAll('#q1 .opt').forEach(o=>o.classList.remove('right','wrong'));
+  document.getElementById('q2in').value=''; document.getElementById('q3in').value=''; q2tries=0;
+  ['q1fb','q2fb','q3fb'].forEach(id=>setFb(id,'','')); document.getElementById('q3model').hidden=true;
+  ['q1','q2','q3'].forEach(q=>{solved[q]=false; document.getElementById(q).classList.remove('ok')}); updScore();
+  qz.scrollTop=0};
+document.getElementById('q2in').addEventListener('keydown',e=>{if(e.key==='Enter') document.getElementById('q2go').click()});
+
 // controls
 const dots=document.getElementById('dots');
 for(let i=0;i<total;i++){const b=document.createElement('button');b.setAttribute('aria-label',i?`صفحة ${AR(i)}`:'الغلاف');b.onclick=()=>go(i);dots.appendChild(b)}
@@ -503,7 +641,7 @@ document.getElementById('playBtn').onclick=()=>{ if(document.getElementById('pla
 const fxBtn=document.getElementById('fxBtn'); fxBtn.setAttribute('aria-pressed',fxOn);
 fxBtn.onclick=()=>{fxOn=!fxOn; fxBtn.setAttribute('aria-pressed',fxOn); try{localStorage.setItem('fx2100',fxOn?'on':'off')}catch(e){} if(fxOn) fxPop()};
 document.getElementById('autoBtn').onclick=()=>{setAuto(!auto); if(auto&&cur>0) playPage(); else if(!auto) stopAll()};
-document.addEventListener('keydown',e=>{ if(e.target.tagName==='INPUT')return;
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!qz.hidden){closeQuiz();return} if(!qz.hidden||e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
   if(e.key==='ArrowLeft')go(cur+1); if(e.key==='ArrowRight')go(cur-1); });
 const h=parseInt((location.hash||'').replace('#p',''),10); if(h>0&&h<total) cur=h;
 render();
